@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Dokumen Sistem Management Terpadu Priamanaya Group</title>
+    <title>Portal Dokumen SMT Priamanaya Group</title>
     
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,8 +12,10 @@
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- DataTables CSS -->
+    <!-- DataTables CSS Dasar -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- TAMBAHAN: DataTables Responsive CSS (Untuk Mobile) -->
+    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     
     <style>
       body { 
@@ -56,7 +58,6 @@
         font-size: 0.9rem;
         padding: 15px 12px;
         border: none;
-        white-space: nowrap;
       }
       .table-custom thead th:first-child { border-top-left-radius: 10px; }
       .table-custom thead th:last-child { border-top-right-radius: 10px; }
@@ -86,16 +87,54 @@
       }
 
       .loader-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+      /* =========================================================
+         KODE KHUSUS OPTIMASI SMARTPHONE (MOBILE RESPONSIVE)
+         ========================================================= */
+      @media (max-width: 768px) {
+        body { padding-top: 15px; }
+        .container-fluid { padding-left: 10px !important; padding-right: 10px !important; }
+        .main-card { padding: 15px; border-radius: 12px; }
+        
+        /* Merapikan Logo dan Judul */
+        .brand-header img { height: 60px !important; }
+        .brand-title { font-size: 1.4rem; }
+        .brand-subtitle { font-size: 0.95rem; }
+        
+        /* Merapikan area Search dan Show Entries agar tidak bertabrakan */
+        div.dataTables_wrapper div.dataTables_length, 
+        div.dataTables_wrapper div.dataTables_filter {
+          text-align: left !important;
+          margin-bottom: 15px;
+        }
+        div.dataTables_wrapper div.dataTables_filter input {
+          width: 100%;
+          margin-left: 0;
+          margin-top: 8px;
+          display: block;
+        }
+        .d-flex.justify-content-end {
+          justify-content: flex-start !important;
+        }
+        
+        /* Modifikasi tombol plus hijau/biru pada tabel mobile */
+        table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, 
+        table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
+          background-color: #1e3a8a !important;
+          box-shadow: none !important;
+          border: none !important;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="container-fluid px-4 px-md-5">
       
       <!-- Area Header -->
-      <div class="text-center mb-5">
+      <div class="text-center mb-4 brand-header">
         <img src="https://lh3.googleusercontent.com/u/0/d/1dKSdWBIHzzWDTfnquufOammtyuimcZ7A" alt="Logo Priamanaya Group" class="mb-3" style="height: 90px; object-fit: contain;">
-        <h2 class="brand-title mb-1">Portal Dokumen Sistem Management Terpadu</h2>
-        <p class="brand-subtitle mb-4">Priamanaya Group</p>
+        <h2 class="brand-title mb-1">Portal Dokumen SMT</h2>
+        <p class="brand-subtitle mb-3">Priamanaya Group</p>
         <hr class="title-divider">
       </div>
 
@@ -109,7 +148,7 @@
 
         <div id="contentContainer" style="display: none;">
           
-          <!-- PANEL FILTER (4 KOLOM) -->
+          <!-- PANEL FILTER -->
           <div class="filter-panel">
             <div class="row g-3">
               <div class="col-md-6 col-lg-3">
@@ -140,8 +179,9 @@
           </div>
 
           <!-- TABEL DOKUMEN -->
-          <div class="table-responsive">
-            <table id="tabelDokumen" class="table table-custom table-hover w-100">
+          <!-- TAMBAHAN: Class 'dt-responsive nowrap' agar responsif di HP -->
+          <div class="table-responsive-custom">
+            <table id="tabelDokumen" class="table table-custom table-hover dt-responsive nowrap w-100">
               <thead>
                 <tr>
                   <th>Entitas</th>
@@ -165,22 +205,24 @@
       </div>
     </div>
 
-    <!-- jQuery, Bootstrap, DataTables JS -->
+    <!-- jQuery & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables Core JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
+    <!-- TAMBAHAN: DataTables Responsive JS -->
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
       $(document).ready(function() {
         
-        // ========================================================
-        // ⚠️ PENTING: GANTI URL DI BAWAH INI DENGAN URL APPS SCRIPT ANDA
-        // URL tersebut adalah link yang Anda dapatkan saat klik Deploy > New Deployment
-        // ========================================================
-        var API_URL = "https://script.google.com/macros/s/AKfycbxMkhNbIue5hMkJR2DfpZ1HL45MuklWyRYEucWX79NZSHOpwSmbJz3RacmkqByw6hnOVw/exec";
+        // PENTING: JANGAN LUPA MASUKKAN KEMBALI URL APPS SCRIPT ANDA DI SINI
+        var API_URL = "ISI_URL_APPS_SCRIPT_ANDA_DI_SINI";
         
-        // Memanggil data (Fetch API)
         fetch(API_URL)
           .then(response => response.json())
           .then(dataArray => {
@@ -197,10 +239,11 @@
 
         var table = $('#tabelDokumen').DataTable({
           data: dataArray,
+          responsive: true, // MENGAKTIFKAN FITUR RESPONSIVE MOBILE
           language: {
             url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json",
-            search: "_INPUT_",
-            searchPlaceholder: "Cari dokumen..."
+            search: "Pencarian:", // Mengubah teks agar lebih rapi di HP
+            searchPlaceholder: "Ketik kata kunci..."
           },
           pageLength: 15,
           order: [[2, 'asc']], 
@@ -210,24 +253,23 @@
           initComplete: function () {
             var api = this.api();
 
-            // Mengisi dropdown filter secara otomatis berdasarkan isi Google Sheets
-            api.column(0).data().unique().sort().each(function (d, j) {
+            // Isi Filter Otomatis
+            api.column(0).data().unique().sort().each(function (d) {
               if(d) $('#filterEntitas').append('<option value="' + d + '">' + d + '</option>');
             });
-            api.column(3).data().unique().sort().each(function (d, j) {
+            api.column(3).data().unique().sort().each(function (d) {
               if(d) $('#filterKategori').append('<option value="' + d + '">' + d + '</option>');
             });
-            api.column(4).data().unique().sort().each(function (d, j) {
+            api.column(4).data().unique().sort().each(function (d) {
               if(d) $('#filterDept').append('<option value="' + d + '">' + d + '</option>');
             });
-            api.column(5).data().unique().sort().each(function (d, j) {
+            api.column(5).data().unique().sort().each(function (d) {
               if(d) $('#filterStandar').append('<option value="' + d + '">' + d + '</option>');
             });
           }
         });
 
         // ---------------- LOGIKA PENCARIAN (FILTER) ----------------
-
         $('#filterEntitas').on('change', function () {
           var val = $.fn.dataTable.util.escapeRegex($(this).val());
           table.column(0).search(val ? '^' + val + '$' : '', true, false).draw();
@@ -241,28 +283,19 @@
           table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
         });
 
-        // Logika Cerdas Khusus Filter Referensi Standar (ISO, SMKP, Integrasi)
         $('#filterStandar').on('change', function () {
           var val = $(this).val();
-          
           if (!val) {
-            table.column(5).search('', true, false).draw(); // Reset filter
+            table.column(5).search('', true, false).draw(); 
           } else {
             var searchRegex = "";
-            
-            // Jika mengandung "ISO" tapi bukan "SMKP"
             if (val.includes('ISO') && !val.includes('SMKP')) {
               searchRegex = 'ISO'; 
-            } 
-            // Jika mengandung "SMKP" tapi bukan "ISO"
-            else if (val.includes('SMKP') && !val.includes('ISO')) {
+            } else if (val.includes('SMKP') && !val.includes('ISO')) {
               searchRegex = 'SMKP'; 
-            } 
-            // Jika standar lain (PROPER, SMK3, atau Integrasi)
-            else {
+            } else {
               searchRegex = '^' + $.fn.dataTable.util.escapeRegex(val) + '$'; 
             }
-            
             table.column(5).search(searchRegex, true, false).draw();
           }
         });
@@ -271,7 +304,7 @@
       function tampilkanError(error) {
         document.getElementById('loading').innerHTML = 
           "<div class='alert alert-danger text-center w-75 mx-auto'>" +
-          "<strong>Gagal memuat data!</strong><br>Pastikan URL Apps Script di dalam kode HTML sudah benar dan Apps Script sudah di-deploy. Detail: " + error + "</div>";
+          "<strong>Gagal memuat data!</strong><br>Pastikan URL Apps Script di dalam kode HTML sudah benar. Detail: " + error + "</div>";
       }
     </script>
   </body>
