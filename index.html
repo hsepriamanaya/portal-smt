@@ -14,7 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS Dasar -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <!-- TAMBAHAN: DataTables Responsive CSS (Untuk Mobile) -->
+    <!-- DataTables Responsive CSS -->
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     
     <style>
@@ -22,8 +22,9 @@
         background-color: #f4f7f9; 
         font-family: 'Inter', sans-serif; 
         color: #334155; 
-        padding-top: 30px;
+        padding-top: 25px;
         padding-bottom: 50px;
+        overflow-x: hidden; 
       }
       
       .brand-header img { height: 85px; object-fit: contain; }
@@ -37,6 +38,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); 
         padding: 30px;
         border: 1px solid #e2e8f0;
+        overflow: hidden; 
       }
 
       .filter-panel {
@@ -89,46 +91,73 @@
       .loader-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
       /* =========================================================
-         KODE KHUSUS OPTIMASI SMARTPHONE (MOBILE RESPONSIVE)
+         OPTIMASI PROFESIONAL TAMPILAN SMARTPHONE (MOBILE UI)
          ========================================================= */
       @media (max-width: 768px) {
-        body { padding-top: 15px; }
-        .container-fluid { padding-left: 10px !important; padding-right: 10px !important; }
-        .main-card { padding: 15px; border-radius: 12px; }
+        body { padding-top: 10px; }
+        .container-fluid { padding-left: 8px !important; padding-right: 8px !important; }
+        .main-card { padding: 12px; border-radius: 12px; width: 100%; box-sizing: border-box; }
         
-        /* Merapikan Logo dan Judul */
         .brand-header img { height: 60px !important; }
-        .brand-title { font-size: 1.4rem; }
-        .brand-subtitle { font-size: 0.95rem; }
+        .brand-title { font-size: 1.15rem; }
+        .brand-subtitle { font-size: 0.85rem; }
         
-        /* Merapikan area Search dan Show Entries agar tidak bertabrakan */
         div.dataTables_wrapper div.dataTables_length, 
         div.dataTables_wrapper div.dataTables_filter {
           text-align: left !important;
-          margin-bottom: 15px;
+          margin-bottom: 12px;
         }
         div.dataTables_wrapper div.dataTables_filter input {
-          width: 100%;
-          margin-left: 0;
-          margin-top: 8px;
+          width: 100% !important;
+          margin-left: 0 !important;
+          margin-top: 6px;
           display: block;
         }
         .d-flex.justify-content-end {
           justify-content: flex-start !important;
         }
-        
-        /* Modifikasi tombol plus hijau/biru pada tabel mobile */
-        table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, 
-        table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
-          background-color: #1e3a8a !important;
-          box-shadow: none !important;
-          border: none !important;
+
+        /* Mengunci Child Row agar tidak keluar border */
+        table.dataTable > tbody > tr.child {
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        table.dataTable > tbody > tr.child td {
+          padding: 8px !important;
+          white-space: normal !important;
+          word-break: break-word !important;
+        }
+        table.dataTable > tbody > tr.child ul.dtr-details {
+          display: block !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        table.dataTable > tbody > tr.child ul.dtr-details > li {
+          border-bottom: 1px solid #e2e8f0 !important;
+          padding: 8px 4px !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        table.dataTable > tbody > tr.child span.dtr-title {
+          font-weight: 600 !important;
+          color: #475569 !important;
+          margin-bottom: 2px !important;
+        }
+        table.dataTable > tbody > tr.child span.dtr-data {
+          color: #1e293b !important;
+          word-break: break-word !important;
+          white-space: normal !important;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container-fluid px-4 px-md-5">
+    <div class="container-fluid px-2 px-md-5">
       
       <!-- Area Header -->
       <div class="text-center mb-4 brand-header">
@@ -179,8 +208,7 @@
           </div>
 
           <!-- TABEL DOKUMEN -->
-          <!-- TAMBAHAN: Class 'dt-responsive nowrap' agar responsif di HP -->
-          <div class="table-responsive-custom">
+          <div class="table-responsive">
             <table id="tabelDokumen" class="table table-custom table-hover dt-responsive nowrap w-100">
               <thead>
                 <tr>
@@ -209,18 +237,15 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- DataTables Core JS -->
+    <!-- DataTables Core & Responsive JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    
-    <!-- TAMBAHAN: DataTables Responsive JS -->
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
       $(document).ready(function() {
         
-        // PENTING: JANGAN LUPA MASUKKAN KEMBALI URL APPS SCRIPT ANDA DI SINI
         var API_URL = "https://script.google.com/macros/s/AKfycbxMkhNbIue5hMkJR2DfpZ1HL45MuklWyRYEucWX79NZSHOpwSmbJz3RacmkqByw6hnOVw/exec";
         
         fetch(API_URL)
@@ -239,10 +264,16 @@
 
         var table = $('#tabelDokumen').DataTable({
           data: dataArray,
-          responsive: true, // MENGAKTIFKAN FITUR RESPONSIVE MOBILE
+          responsive: true,
+          // MENGATUR AGAR KOLOM NOMOR & JUDUL DOKUMEN SELALU MUNCUL DI HP
+          columnDefs: [
+            { responsivePriority: 1, targets: 1 }, // No. Dokumen (Prioritas Utama)
+            { responsivePriority: 2, targets: 2 }, // Judul Dokumen (Prioritas Kedua)
+            { responsivePriority: 3, targets: 8 }  // Tombol Aksi
+          ],
           language: {
             url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json",
-            search: "Pencarian:", // Mengubah teks agar lebih rapi di HP
+            search: "Pencarian:",
             searchPlaceholder: "Ketik kata kunci..."
           },
           pageLength: 15,
@@ -253,7 +284,6 @@
           initComplete: function () {
             var api = this.api();
 
-            // Isi Filter Otomatis
             api.column(0).data().unique().sort().each(function (d) {
               if(d) $('#filterEntitas').append('<option value="' + d + '">' + d + '</option>');
             });
