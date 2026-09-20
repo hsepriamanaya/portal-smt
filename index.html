@@ -117,6 +117,12 @@
           justify-content: flex-start !important;
         }
 
+        /* Memastikan teks pada sel tabel bisa turun baris secara fleksibel */
+        table.dataTable > tbody > tr > td {
+          white-space: normal !important;
+          word-break: break-word !important;
+        }
+
         /* Mengunci Child Row agar tidak keluar border */
         table.dataTable > tbody > tr.child {
           width: 100% !important;
@@ -207,9 +213,9 @@
             </div>
           </div>
 
-          <!-- TABEL DOKUMEN -->
+          <!-- TABEL DOKUMEN (Tanpa kata nowrap agar teks bisa turun baris di HP) -->
           <div class="table-responsive">
-            <table id="tabelDokumen" class="table table-custom table-hover dt-responsive nowrap w-100">
+            <table id="tabelDokumen" class="table table-custom table-hover dt-responsive w-100">
               <thead>
                 <tr>
                   <th>Entitas</th>
@@ -265,10 +271,10 @@
         var table = $('#tabelDokumen').DataTable({
           data: dataArray,
           responsive: true,
-          // MENGATUR AGAR KOLOM NOMOR & JUDUL DOKUMEN SELALU MUNCUL DI HP
+          // Mengatur prioritas kolom agar No. Dokumen dan Judul Dokumen Wajib Tampil di HP
           columnDefs: [
-            { responsivePriority: 1, targets: 1 }, // No. Dokumen (Prioritas Utama)
-            { responsivePriority: 2, targets: 2 }, // Judul Dokumen (Prioritas Kedua)
+            { responsivePriority: 1, targets: 1 }, // No. Dokumen
+            { responsivePriority: 2, targets: 2 }, // Judul Dokumen
             { responsivePriority: 3, targets: 8 }  // Tombol Aksi
           ],
           language: {
