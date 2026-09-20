@@ -12,9 +12,11 @@
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- DataTables CSS Dasar -->
+    <!-- Bootstrap Icons (UNTUK IKON AKSI) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- DataTables CSS Dasar & Responsive -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <!-- DataTables Responsive CSS -->
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     
     <style>
@@ -79,7 +81,6 @@
         border: 1px solid #bfdbfe !important;
         font-weight: 600; 
         border-radius: 6px;
-        padding: 5px 12px;
         transition: all 0.2s;
       }
       .btn-primary:hover { 
@@ -91,7 +92,7 @@
       .loader-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
       /* =========================================================
-         OPTIMASI KHUSUS TAMPILAN SMARTPHONE (MOBILE UI)
+         OPTIMASI TAMPILAN SMARTPHONE (MOBILE UI)
          ========================================================= */
       @media (max-width: 768px) {
         body { padding-top: 10px; }
@@ -336,7 +337,7 @@
 
       function tampilkanError(error) {
         document.getElementById('loading').innerHTML = 
-          "<div class='alert alert-danger text-center w-75 imp-auto'>" +
+          "<div class='alert alert-danger text-center w-75 mx-auto'>" +
           "<strong>Gagal memuat data!</strong><br>Pastikan URL Apps Script di dalam kode HTML sudah benar. Detail: " + error + "</div>";
       }
     </script>
