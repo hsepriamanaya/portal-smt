@@ -91,7 +91,7 @@
       .loader-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
       /* =========================================================
-         OPTIMASI PROFESIONAL TAMPILAN SMARTPHONE (MOBILE UI)
+         OPTIMASI KHUSUS TAMPILAN SMARTPHONE (MOBILE UI)
          ========================================================= */
       @media (max-width: 768px) {
         body { padding-top: 10px; }
@@ -117,13 +117,11 @@
           justify-content: flex-start !important;
         }
 
-        /* Memastikan teks pada sel tabel bisa turun baris secara fleksibel */
         table.dataTable > tbody > tr > td {
           white-space: normal !important;
           word-break: break-word !important;
         }
 
-        /* Mengunci Child Row agar tidak keluar border */
         table.dataTable > tbody > tr.child {
           width: 100% !important;
           max-width: 100% !important;
@@ -213,7 +211,7 @@
             </div>
           </div>
 
-          <!-- TABEL DOKUMEN (Tanpa kata nowrap agar teks bisa turun baris di HP) -->
+          <!-- TABEL DOKUMEN -->
           <div class="table-responsive">
             <table id="tabelDokumen" class="table table-custom table-hover dt-responsive w-100">
               <thead>
@@ -271,7 +269,6 @@
         var table = $('#tabelDokumen').DataTable({
           data: dataArray,
           responsive: true,
-          // Mengatur prioritas kolom agar No. Dokumen dan Judul Dokumen Wajib Tampil di HP
           columnDefs: [
             { responsivePriority: 1, targets: 1 }, // No. Dokumen
             { responsivePriority: 2, targets: 2 }, // Judul Dokumen
@@ -339,7 +336,7 @@
 
       function tampilkanError(error) {
         document.getElementById('loading').innerHTML = 
-          "<div class='alert alert-danger text-center w-75 mx-auto'>" +
+          "<div class='alert alert-danger text-center w-75 imp-auto'>" +
           "<strong>Gagal memuat data!</strong><br>Pastikan URL Apps Script di dalam kode HTML sudah benar. Detail: " + error + "</div>";
       }
     </script>
