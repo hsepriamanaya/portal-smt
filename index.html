@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Dokumen SMT Priamanaya Group</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <style>
+      body { 
+        background-color: #f4f7f9; 
+        font-family: 'Inter', sans-serif; 
+        color: #334155; 
+        padding-top: 30px;
+        padding-bottom: 50px;
+      }
+      
+      .brand-header img { height: 85px; object-fit: contain; }
+      .brand-title { color: #1e3a8a; font-weight: 700; letter-spacing: -0.5px; }
+      .brand-subtitle { color: #64748b; font-weight: 500; font-size: 1.1rem; }
+      .title-divider { border-top: 3px solid #1e3a8a; width: 80px; margin: 0 auto; border-radius: 5px; }
+
+      .main-card { 
+        background: #ffffff; 
+        border-radius: 16px; 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); 
+        padding: 30px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .filter-panel {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+      }
+      .filter-label { font-size: 0.85rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+      .form-select { border-color: #cbd5e1; border-radius: 8px; box-shadow: none; font-size: 0.95rem; }
+      .form-select:focus { border-color: #1e3a8a; box-shadow: 0 0 0 0.25rem rgba(30, 58, 138, 0.1); }
+
+      .table-custom { border-collapse: separate; border-spacing: 0; width: 100%; margin-top: 10px !important; }
+      .table-custom thead th { 
+        background-color: #1e3a8a; 
+        color: #ffffff; 
+        font-weight: 600; 
+        font-size: 0.9rem;
+        padding: 15px 12px;
+        border: none;
+        white-space: nowrap;
+      }
+      .table-custom thead th:first-child { border-top-left-radius: 10px; }
+      .table-custom thead th:last-child { border-top-right-radius: 10px; }
+      
+      .table-custom tbody td { 
+        padding: 14px 12px; 
+        vertical-align: middle; 
+        font-size: 0.9rem;
+        border-bottom: 1px solid #e2e8f0;
+        color: #334155;
+      }
+      .table-custom tbody tr:hover { background-color: #f1f5f9; transition: all 0.2s ease; }
+
+      .btn-primary { 
+        background-color: #eff6ff !important; 
+        color: #1d4ed8 !important; 
+        border: 1px solid #bfdbfe !important;
+        font-weight: 600; 
+        border-radius: 6px;
+        padding: 5px 12px;
+        transition: all 0.2s;
+      }
+      .btn-primary:hover { 
+        background-color: #1e40af !important; 
+        color: #ffffff !important; 
+        border-color: #1e40af !important;
+      }
+
+      .loader-container { min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid px-4 px-md-5">
+      
+      <!-- Area Header -->
+      <div class="text-center mb-5">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1dKSdWBIHzzWDTfnquufOammtyuimcZ7A" alt="Logo Priamanaya Group" class="mb-3" style="height: 90px; object-fit: contain;">
+        <h2 class="brand-title mb-1">Portal Dokumen SMT</h2>
+        <p class="brand-subtitle mb-4">Priamanaya Group</p>
+        <hr class="title-divider">
+      </div>
+
+      <!-- Area Card Utama -->
+      <div class="main-card">
+        
+        <div id="loading" class="loader-container">
+          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+          <p class="mt-3 fw-medium text-muted">Sinkronisasi data dokumen terbaru...</p>
+        </div>
+
+        <div id="contentContainer" style="display: none;">
+          
+          <!-- PANEL FILTER (4 KOLOM) -->
+          <div class="filter-panel">
+            <div class="row g-3">
+              <div class="col-md-6 col-lg-3">
+                <label class="filter-label">Entitas</label>
+                <select id="filterEntitas" class="form-select">
+                  <option value="">Semua Entitas</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="filter-label">Kategori Dokumen</label>
+                <select id="filterKategori" class="form-select">
+                  <option value="">Semua Kategori</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="filter-label">Departemen</label>
+                <select id="filterDept" class="form-select">
+                  <option value="">Semua Departemen</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="filter-label">Referensi Standar</label>
+                <select id="filterStandar" class="form-select">
+                  <option value="">Semua Standar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- TABEL DOKUMEN -->
+          <div class="table-responsive">
+            <table id="tabelDokumen" class="table table-custom table-hover w-100">
+              <thead>
+                <tr>
+                  <th>Entitas</th>
+                  <th>No. Dokumen</th>
+                  <th>Judul Dokumen</th>
+                  <th>Kategori</th>
+                  <th>Dept.</th>
+                  <th>Referensi Standar</th>
+                  <th>Revisi</th>
+                  <th>Tanggal Terbit</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Data diisi oleh Script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- jQuery, Bootstrap, DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        
+        // ========================================================
+        // ⚠️ PENTING: GANTI URL DI BAWAH INI DENGAN URL APPS SCRIPT ANDA
+        // URL tersebut adalah link yang Anda dapatkan saat klik Deploy > New Deployment
+        // ========================================================
+        var API_URL = "https://script.google.com/macros/s/AKfycbxMkhNbIue5hMkJR2DfpZ1HL45MuklWyRYEucWX79NZSHOpwSmbJz3RacmkqByw6hnOVw/exec";
+        
+        // Memanggil data (Fetch API)
+        fetch(API_URL)
+          .then(response => response.json())
+          .then(dataArray => {
+            tampilkanData(dataArray);
+          })
+          .catch(error => {
+            tampilkanError("Gagal terhubung ke database server. " + error);
+          });
+      });
+
+      function tampilkanData(dataArray) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('contentContainer').style.display = 'block';
+
+        var table = $('#tabelDokumen').DataTable({
+          data: dataArray,
+          language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json",
+            search: "_INPUT_",
+            searchPlaceholder: "Cari dokumen..."
+          },
+          pageLength: 15,
+          order: [[2, 'asc']], 
+          dom: "<'row mb-3'<'col-md-6'l><'col-md-6 d-flex justify-content-end'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row mt-3'<'col-md-5'i><'col-md-7'p>>",
+          initComplete: function () {
+            var api = this.api();
+
+            // Mengisi dropdown filter secara otomatis berdasarkan isi Google Sheets
+            api.column(0).data().unique().sort().each(function (d, j) {
+              if(d) $('#filterEntitas').append('<option value="' + d + '">' + d + '</option>');
+            });
+            api.column(3).data().unique().sort().each(function (d, j) {
+              if(d) $('#filterKategori').append('<option value="' + d + '">' + d + '</option>');
+            });
+            api.column(4).data().unique().sort().each(function (d, j) {
+              if(d) $('#filterDept').append('<option value="' + d + '">' + d + '</option>');
+            });
+            api.column(5).data().unique().sort().each(function (d, j) {
+              if(d) $('#filterStandar').append('<option value="' + d + '">' + d + '</option>');
+            });
+          }
+        });
+
+        // ---------------- LOGIKA PENCARIAN (FILTER) ----------------
+
+        $('#filterEntitas').on('change', function () {
+          var val = $.fn.dataTable.util.escapeRegex($(this).val());
+          table.column(0).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+        $('#filterKategori').on('change', function () {
+          var val = $.fn.dataTable.util.escapeRegex($(this).val());
+          table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+        $('#filterDept').on('change', function () {
+          var val = $.fn.dataTable.util.escapeRegex($(this).val());
+          table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+        });
+
+        // Logika Cerdas Khusus Filter Referensi Standar (ISO, SMKP, Integrasi)
+        $('#filterStandar').on('change', function () {
+          var val = $(this).val();
+          
+          if (!val) {
+            table.column(5).search('', true, false).draw(); // Reset filter
+          } else {
+            var searchRegex = "";
+            
+            // Jika mengandung "ISO" tapi bukan "SMKP"
+            if (val.includes('ISO') && !val.includes('SMKP')) {
+              searchRegex = 'ISO'; 
+            } 
+            // Jika mengandung "SMKP" tapi bukan "ISO"
+            else if (val.includes('SMKP') && !val.includes('ISO')) {
+              searchRegex = 'SMKP'; 
+            } 
+            // Jika standar lain (PROPER, SMK3, atau Integrasi)
+            else {
+              searchRegex = '^' + $.fn.dataTable.util.escapeRegex(val) + '$'; 
+            }
+            
+            table.column(5).search(searchRegex, true, false).draw();
+          }
+        });
+      }
+
+      function tampilkanError(error) {
+        document.getElementById('loading').innerHTML = 
+          "<div class='alert alert-danger text-center w-75 mx-auto'>" +
+          "<strong>Gagal memuat data!</strong><br>Pastikan URL Apps Script di dalam kode HTML sudah benar dan Apps Script sudah di-deploy. Detail: " + error + "</div>";
+      }
+    </script>
+  </body>
+</html>
