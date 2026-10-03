@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Portal Insiden & RTP - PT Dizamatra Powerindo · v3</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1b2430;--mu:#667085;--bd:#e3e6eb;--pr:#c2410c;--ok:#16a34a;--wa:#d97706;--er:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12161c;--card:#1b222b;--tx:#e8ecf1;--mu:#98a2b3;--bd:#2c3642;--pr:#fb923c}}
+:root[data-theme=dark]{--bg:#12161c;--card:#1b222b;--tx:#e8ecf1;--mu:#98a2b3;--bd:#2c3642;--pr:#fb923c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+h1{font-size:16px;margin:0}h1 small{color:var(--mu);font-weight:400;display:block;font-size:12px}
+nav{display:flex;gap:6px;margin-top:8px;overflow-x:auto}nav button{white-space:nowrap}
+button,.btn{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;border-radius:8px;cursor:pointer}
+button.on,button.pri{background:var(--pr);color:#fff;border-color:var(--pr)}
+main{padding:16px;max-width:1200px;margin:auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));margin-bottom:14px}.kpi{min-width:0;overflow:hidden}
+.kpi b{font-size:clamp(18px,2vw,24px);line-height:1.25;display:block;overflow-wrap:anywhere}.kpi span,.mu{color:var(--mu);font-size:12px}
+h3{overflow-wrap:anywhere;margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.03em;color:var(--mu)}
+.cv{position:relative;height:240px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--bd);vertical-align:top}th{font-size:12px;color:var(--mu)}
+tr.cl{cursor:pointer}tr.cl:hover{background:var(--bg)}
+.wrap{overflow-x:auto}
+input,select,textarea{font:inherit;width:100%;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+label{display:block;font-size:12px;color:var(--mu);margin-bottom:2px}
+.f{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;border:1px solid var(--bd)}
+.Open{color:var(--er)}.Progress{color:var(--wa)}.Done{color:var(--ok)}
+.bar{height:8px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
+.ev{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.ev img{height:70px;border-radius:6px;cursor:pointer;border:1px solid var(--bd)}
+.chip{padding:4px 8px;border:1px solid var(--bd);border-radius:8px;font-size:12px}
+.rc{display:grid;gap:4px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}.rc label{display:flex;gap:6px;align-items:center;color:var(--tx);font-size:13px}.rc input{width:auto}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.row>*{width:auto}
+#lb{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:9}#lb img{max-width:92%;max-height:92%}
+body.ro .ctl{display:none}a.chip{color:var(--tx);text-decoration:none}
+.Closed{color:var(--ok)}#st{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border:1px solid var(--bd);padding:6px 12px;border-radius:8px;display:none;z-index:8}#st.bad{border-color:var(--er);color:var(--er);cursor:pointer}
+.chks{display:flex;flex-wrap:wrap;gap:6px 16px;padding:6px 0}.chks label.ck{display:flex;gap:6px;align-items:center;color:var(--tx);font-size:13px;margin:0;cursor:pointer}.chks input{width:auto}
+.inv0{color:var(--mu)}.inv1{color:var(--wa)}.inv2{color:var(--ok)}
+
+/* ===== Tampilan profesional ===== */
+:root{--bg:#f1f5f9;--card:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--pr:#c2410c;--nav:#0b1f3a;--nav2:#16335c}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1220;--card:#131c2e;--tx:#e6ebf3;--mu:#94a3b8;--bd:#25324a;--pr:#fb923c;--nav:#070d19;--nav2:#101a30}}
+#shell{display:flex;min-height:100vh}
+#side{width:250px;flex:none;background:var(--nav);color:#e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:16px 12px;gap:6px;z-index:6}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 6px 14px;border-bottom:1px solid #ffffff1f;margin-bottom:8px}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--pr);color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.5px;flex:none}
+.brand b{display:block;font-size:14px;line-height:1.25;color:#fff}.brand small{font-size:11px;color:#94a3b8;line-height:1.3;display:block}
+#nav{display:flex;flex-direction:column;gap:4px;margin:0}
+#nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:0;color:#cbd5e1;padding:10px 12px;border-radius:10px;font-weight:500}
+#nav button:hover{background:var(--nav2);color:#fff}#nav button.on{background:var(--pr);color:#fff}
+#usr{margin-top:auto;border-top:1px solid #ffffff1f;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+#usr .who{font-size:13px;display:flex;flex-direction:column;gap:3px}#usr .who b{color:#fff}#usr .tag{align-self:flex-start;color:#cbd5e1}#usr .mu{color:#94a3b8}
+#usr button{background:transparent;color:#e2e8f0;border-color:#ffffff40}#usr button.pri{background:var(--pr);border-color:var(--pr);color:#fff}
+main{flex:1;min-width:0;max-width:1500px;margin:0;padding:26px 30px}
+.ph{margin-bottom:18px}.ph h2{margin:0;font-size:22px;letter-spacing:-.01em}.ph p{margin:2px 0 0;color:var(--mu)}
+.card{border-radius:14px;box-shadow:0 1px 2px #0f172a0d,0 1px 3px #0f172a0a;padding:18px}
+h3{color:var(--tx);font-size:12px;letter-spacing:.06em;font-weight:700}
+.kpi{border-top:3px solid var(--pr)}.kpi b{font-weight:700}
+th{background:color-mix(in srgb,var(--bd) 45%,transparent);text-transform:uppercase;letter-spacing:.04em;font-size:11px}
+td,th{padding:10px 12px}tr.cl:hover{background:color-mix(in srgb,var(--pr) 7%,transparent)}
+input,select,textarea{background:var(--card);padding:9px 11px}
+input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--pr) 45%,transparent);border-color:var(--pr)}
+button,.btn{padding:8px 14px;font-weight:500}button:hover{border-color:var(--pr)}button.pri{box-shadow:0 1px 2px #0003}
+button.ghost{border:0;background:transparent;color:var(--mu);padding:0 0 10px}
+.tag{padding:2px 10px;font-weight:600;background:color-mix(in srgb,currentColor 10%,transparent);border-color:color-mix(in srgb,currentColor 25%,transparent)}
+.Open{color:#dc2626}.Progress{color:#d97706}.Done,.Closed{color:#16a34a}
+h4.sec{margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--bd);font-size:12px;color:var(--pr);text-transform:uppercase;letter-spacing:.07em}h4.sec:first-child{margin-top:0}
+.hero .ttl{margin:2px 0 0;font-size:20px;line-height:1.3}.dl>div{background:var(--bg);border-radius:10px;padding:8px 12px}
+.chrono{white-space:pre-wrap;margin:0;line-height:1.7}
+.login{max-width:400px;margin:40px auto;text-align:center}.login form{text-align:left}.login .lg{font-size:32px}.err{color:var(--er);font-size:12px;min-height:16px;margin-top:6px}
+.imgw{display:inline-flex;flex-direction:column;gap:4px;align-items:flex-start}
+@media(max-width:860px){#shell{display:block}#side{width:auto;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:8px 10px;gap:6px}
+.brand{border:0;margin:0;padding:0}.brand small{display:none}#nav{flex-direction:row;overflow-x:auto;order:3;width:100%}#nav button{width:auto;padding:8px 10px;white-space:nowrap}
+#usr{margin:0 0 0 auto;border:0;padding:0;flex-direction:row;align-items:center}#usr .who{display:none}main{padding:14px}}
+.ver{font-size:10px;color:#64748b;text-align:center;padding-top:6px}
+</style>
+</head><body>
+<div id="shell"><aside id="side"><div class="brand"><div class="logo">DP</div><div><b>Portal Rekapitulasi Insiden & Monitoring RTP</b><small>PT. Dizamatra Powerindo – Lahat</small></div></div><nav id="nav"></nav><div id="usr"></div><div class="ver">Versi 3 · login manual</div></aside><main id="app"></main></div><div id="st" onclick="flush()"></div><div id="lb" onclick="this.style.display='none'"><img id="lbi"></div>
+<script>
+const RC=[["Pelaksanaan Prosedur/Kebijakan","UA"],["Penggunaan Peralatan","UA"],["Metode Perlindungan (APD)","UA"],["Tidak Memperhatikan/Menyadari","UA"],["Sistem Pengaman Tidak Memadai","UC"],["Perkakas/Peralatan Tidak Aman","UC"],["Pemaparan Kondisi Kesehatan","UC"],["Lingkungan Kerja Tidak Aman","UC"],["Ketidakmampuan Fisik","HF"],["Stress Fisik","HF"],["Ketidakmampuan Mental","HF"],["Stress Mental","HF"],["Tingkat Keterampilan","HF"],["Perilaku/Kurang Motivasi","HF"],["Kurang Pelatihan","JF"],["Supervisi Tidak Memadai","JF"],["Seleksi & Pengawasan Kontraktor","JF"],["Rekayasa Desain","JF"],["Rencana Pemeliharaan","JF"],["Pembelian & Kendali Bahan","JF"],["Perkakas/Peralatan Tidak Memadai","JF"],["Peraturan/Prosedur Kerja","JF"],["Komunikasi Tidak Memadai","JF"]];
+const GRP={UA:"Tindakan Tidak Aman",UC:"Kondisi Tidak Aman",HF:"Faktor Manusia",JF:"Faktor Pekerjaan"};
+const COMP=["PT. DIZAMATRA POWERINDO","PT. ANTAREJA MAHADA MAKMUR","PT. SCADA","PT. KALIMANTAN PRIMA PERSADA","PT. SUCOFINDO","SUBCON/VENDOR","PT. CIPTAKRIDATAMA"];
+const DEPT=["TECHNICAL SERVICES","PRODUKSI","HEALTH SAFETY & ENVIRONMENT","ANGKUTAN & STASIUN","MAINTENANCE","HRGA","EXTERNAL RELATION, CSR & SECURITY","CIVIL PROJECT","REPORTING & GOV. RELATION","FINANCE & ACCOUNTING","LAND ACQUISITION","SUPPLY CHAIN MANAGEMENT","IT SUPPORT"];
+const CLS=["Fatality","Lost Time Injury","Restricted Duties Injury","Minor Treatment Injury","First Aid","Property Damage","Minor Environment Accident (≤ 50 L Tumpahan)","Major Environment Accident (≥50L Tumpahan)","Nearmiss"];
+const JNS=["Menabrak/Ditabrak","Jatuh dari Ketinggian","Jatuh Pada Permukaan Yang Sama","Kontak Dengan Pemukaan Kerja","Tenggelam, Terperosok, Amblas","Tekanan, Beban berlebih, digunakan berlebih.","Masuknya benda asing ke tubuh","Kontak dengan listrik, kimia, racun, kebisingan","Proses penanganan(Lifting, Mendorong, Menarik)","Terjepit","Tertimpa","Terbentur","Kejatuhan Material","Terkena suhu ekstrim","Tersengat/Tergigit Sesuatu","Gerakan Berulang (Ergonomi)","Gangguan/stress mental","Kebakaran/ledakan","Tipe Insiden Lainnya"];
+const POS=["MANAJEMEN","FOREMAN","SUPERVISOR","SUPERINTENDENT","MEKANIK","HELPER","FTO/FTM","ADMINISTRASI","SUBKONTRAKTOR","DRIVER DT","DRIVER FD","DRIVER HD","DRIVER FT","OPERATOR BD","OPERATOR COMPACT","OPERATOR DR","OPERATOR EX","OPERATOR GR","DRIVER WT","OPERATOR WL","OPERATOR POMPA","TRAINER OPERATOR","DRIVER (MH,LV)","OPERATOR RS","OPERATOR FORKLIFT"],LOC=["LOADING POINT","HAULING ROAD OB","HAULING ROAD COAL","HAULING ROAD JETTY","STOCKPILE/ROM","WORKSHOP","FUEL STORAGE","OFFICE","MESS","PIT STOP","DISPOSAL","WAREHOUSE","IN PIT AREA","SUMP AREA","LAND CLEARING","LEACH PAD","CONTAINER YARD","AREA PARKIR","JALAN UMUM","LAIN-LAIN"],UNIT=["Buldozer","Backhoe Loader","Excavator","Wheel Loader","Reach Stacker","Motor Grader","Dump Truck","Flat Deck","Unit Support (FT, WT, TS, LP,MH)","Light Vehicle","Forklift","Heavy Duty Truck","Pump","Perkakas/peralatan","Lain-Lain"],INJ=["MATA","LENGAN","PUNGGUNG","BATANG TUBUH","TANGAN","KAKI","TUNGKAI","JARI TANGAN","JARI KAKI","ORGAN DALAM","KEPALA","LAIN-LAIN","NIHIL"];
+const BASE={co:COMP,dept:DEPT,pos:POS,loc:LOC,unit:UNIT,inj:INJ,cls:CLS,jns:JNS},UPPER=["dept","pos","loc","inj"];
+/* daftar pilihan = daftar baku + isian manual yang sudah ada di data (otomatis masuk dropdown & filter) */
+const PK=["name","nik","pos","hired","age","kage","kt","inj","fatigue","inMess","outMess"];
+/* orang #1 = kolom utama di sheet; orang ke-2 dst. disimpan di kolom "others" (JSON) */
+const pp=i=>[Object.fromEntries(PK.map(k=>[k,i[k]??""])),...(i.others||[])],injs=p=>String(p.inj??"").split(",").map(x=>x.trim()).filter(Boolean),nm=i=>pp(i).map(p=>p.name).join(" ");
+const opts=k=>{const b=BASE[k],seen=new Set(b.map(x=>x.toLowerCase())),ex=[],vals=[];S.inc.forEach(i=>{if(k=="inj")pp(i).forEach(p=>vals.push(...injs(p)));else if(k=="pos")pp(i).forEach(p=>vals.push(p.pos));else vals.push(i[k])});vals.forEach(v=>{const x=String(v??"").trim();if(x&&!seen.has(x.toLowerCase())){seen.add(x.toLowerCase());ex.push(x)}});return [...b,...ex.sort((a,b)=>a.localeCompare(b))]};
+const canon=(k,t)=>opts(k).find(x=>x.toLowerCase()==t.toLowerCase())||(UPPER.includes(k)?t.toUpperCase():t);
+const INV=["Belum Dimulai","Sedang Investigasi","Selesai"],invOf=i=>INV.includes(i.invStatus)?i.invStatus:INV[0],invCls=i=>"inv"+INV.indexOf(invOf(i));
+const HRS=[...Array(24)].map((_,i)=>{const p=n=>String(n).padStart(2,"0");return `${p(i)}:01 - ${p(i+1)}:00`});
+const MON=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+let V={p:"dash",id:null,co:"",q:"",m:"",rs:"",y:"",st:"",iv:"",pm:"both",dp:"",jb:"",lc:"",un:"",cl:"",jn:"",xo:false},CH=[];
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cnt=(a,f)=>{const m={};a.forEach(x=>{const k=f(x);if(k)m[k]=(m[k]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])};
+const rp=i=>S.rtp.filter(r=>r.incId===i), idr=n=>n.toLocaleString("id-ID");
+function go(p,id){V.p=p;if(p=="form")V.ed=null;if(id!==undefined)V.id=id;render();scrollTo(0,0)}
+const pct=(n,t)=>(t?n/t*100:0).toFixed(1).replace(/\.0$/,"").replace(".",",")+"%";
+const idrs=n=>n>=1e9?(n/1e9).toFixed(2).replace(".",",")+" M":n>=1e6?(n/1e6).toFixed(1).replace(".",",")+" jt":idr(n);
+function wrap(s,n){s=String(s);if(s.length<=n)return s;const o=[];let l="";s.split(" ").forEach(w=>{if(l&&(l+" "+w).length>n){o.push(l);l=w}else l=l?l+" "+w:w});if(l)o.push(l);return o.length>1?o:o[0]}
+const CV=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+function theme(){if(!window.Chart)return;Chart.defaults.color=CV("--mu")||"#667085";Chart.defaults.borderColor=CV("--bd")||"#e3e6eb";Chart.defaults.font.family="system-ui,-apple-system,'Segoe UI',sans-serif"}
+/* label nilai (jumlah / persentase) digambar langsung di grafik, tanpa plugin tambahan */
+const valLabels={id:"valLabels",afterDatasetsDraw(c,_,o){if(!o||!o.on)return;
+const ds=c.data.datasets[0],m=c.getDatasetMeta(0),x=c.ctx,t=o.total,md=V.pm||"both",dn=c.config.type=="doughnut",hz=c.options.indexAxis=="y";
+x.save();x.fillStyle=dn?"#fff":o.color;x.font=(dn?"600 11px ":"10px ")+"system-ui,sans-serif";
+m.data.forEach((el,i)=>{const v=+ds.data[i];if(!v)return;const p=pct(v,t);
+if(dn){if(!c.getDataVisibility(i)||v/t<.06)return;const q=el.tooltipPosition();x.textAlign="center";x.textBaseline="middle";x.fillText(md=="n"?String(v):p,q.x,q.y);return}
+if(hz){x.textAlign="left";x.textBaseline="middle";x.fillText(md=="p"?p:md=="n"?String(v):v+" ("+p+")",el.x+5,el.y);return}
+x.textAlign="center";x.textBaseline="bottom";
+if(md=="both"&&o.two){x.fillText(p,el.x,el.y-3);x.fillText(String(v),el.x,el.y-14)}else x.fillText(md=="p"?p:md=="n"?String(v):v+" ("+p+")",el.x,el.y-3)})
+x.restore()}};
+function chart(id,type,labels,data,opt={}){const el=document.getElementById(id);if(!el||!window.Chart)return;theme();
+const hz=!!opt.h,dn=type=="doughnut",T=opt.total||data.reduce((a,b)=>a+(+b||0),0),cat=hz?"y":"x",val=hz?"x":"y",
+disp=dn?labels:labels.map(l=>wrap(l,hz?24:12)),box=el.parentElement,cur=parseInt(box.style.height)||240;
+if(hz){const L=disp.reduce((a,l)=>a+(Array.isArray(l)?l.length:1),0);box.style.height=Math.min(800,Math.max(cur,L*14+labels.length*8+50))+"px"}
+else if(dn)box.style.height=Math.max(cur,300)+"px";
+CH.push(new Chart(el,{type,plugins:[valLabels],data:{labels:disp,datasets:[{data,backgroundColor:type=="bar"||type=="line"?"#c2410c":["#c2410c","#0e7490","#6d28d9","#ca8a04","#16a34a","#db2777","#475569"],borderColor:dn?CV("--card")||"#fff":"#c2410c",borderWidth:dn?2:1,borderRadius:dn?0:4,maxBarThickness:38,tension:.3}]},
+options:{indexAxis:hz?"y":"x",maintainAspectRatio:false,layout:{padding:{right:4,top:4}},
+plugins:{valLabels:{on:type!="line",total:T,color:CV("--tx")||"#1b2430",two:!hz&&!dn&&labels.length>8},
+legend:{display:dn,position:"bottom",labels:{boxWidth:12,padding:10,font:{size:11},generateLabels:c=>labels.map((l,i)=>({text:l+": "+data[i]+" ("+pct(data[i],T)+")",fillStyle:c.data.datasets[0].backgroundColor[i%7],strokeStyle:c.data.datasets[0].backgroundColor[i%7],lineWidth:0,hidden:!c.getDataVisibility(i),index:i,fontColor:CV("--mu")}))}},
+tooltip:{callbacks:{title:i=>labels[i[0].dataIndex],label:c=>" "+c.raw+(opt.unit?" "+opt.unit:"")+" ("+pct(c.raw,T)+")"}}},
+scales:dn?{}:{[cat]:{grid:{display:false},ticks:{autoSkip:false,font:{size:hz?11:10}}},[val]:{beginAtZero:true,grace:hz?"28%":"22%",ticks:{precision:0}}}}}))}
+function cardChart(t,id,h){return `<div class="card"><h3>${t}</h3><div class="cv" style="height:${h||240}px"><canvas id="${id}"></canvas></div></div>`}
+function dash(){const d=F(),n=d.length,P0=d.flatMap(pp),cdr=P0.filter(p=>injs(p).some(x=>x!="NIHIL")).length,r=S.rtp.filter(x=>d.some(i=>i.id==x.incId));
+const dn=r.filter(x=>x.status=="Done").length,cost=d.reduce((a,i)=>a+(+i.cost||0),0),c=k=>d.filter(i=>i.cls==k).length;
+$("#app").innerHTML=`<div class="row">${selY()}${selC()}${selS()}${selI()}${selP()}</div>${selX()}
+<div class="kpis"><div class="card kpi"><b>${n}</b><span>Total insiden</span></div><div class="card kpi"><b>${c("Nearmiss")}</b><span>Nearmiss (${pct(c("Nearmiss"),n)})</span></div><div class="card kpi"><b>${c("Property Damage")}</b><span>Property Damage (${pct(c("Property Damage"),n)})</span></div><div class="card kpi"><b>${c("First Aid")}</b><span>First Aid (${pct(c("First Aid"),n)})</span></div><div class="card kpi"><b title="Rp ${idr(cost)}">Rp ${idrs(cost)}</b><span>Estimasi biaya · Rp ${idr(cost)}</span></div><div class="card kpi"><b>${d.filter(i=>stOf(i)=="Closed").length}/${n}</b><span>Insiden closed (${pct(d.filter(i=>stOf(i)=="Closed").length,n)})</span></div><div class="card kpi"><b>${d.filter(i=>invOf(i)==INV[2]).length}/${n}</b><span>Investigasi selesai (${pct(d.filter(i=>invOf(i)==INV[2]).length,n)})</span></div><div class="card kpi"><b>${P0.length}</b><span>Orang terlibat · ${cdr} cedera</span></div><div class="card kpi"><b>${d.reduce((a,i)=>a+(+i.dlMan||0),0)} / ${d.reduce((a,i)=>a+(+i.dlUnit||0),0)}</b><span>Daylost man / unit</span></div><div class="card kpi"><b>${r.length?Math.round(dn/r.length*100):0}%</b><span>RTP selesai (${dn}/${r.length})</span></div></div>
+<div class="grid">${cardChart("Jumlah per tahun","c0")}${cardChart("Tren per bulan (per tahun)","c1")}${cardChart("Berdasarkan perusahaan","c2")}${cardChart("Klasifikasi insiden","c3")}${cardChart("Jenis insiden","c4",280)}${cardChart("Waktu kejadian","c5")}${cardChart("Shift","c6")}${cardChart("Departemen","c7")}${cardChart("Tempat kejadian","c8",280)}${cardChart("Unit terlibat","c9",280)}${cardChart("Hari kejadian (hari ke-)","c10")}${cardChart("Jabatan (per orang)","c11",280)}${cardChart("Lama kerja (per orang)","c12")}${cardChart("Umur karyawan (per orang)","c13")}${cardChart("Umur SIMPER (per orang)","c14")}${cardChart("Tipe SIMPER (per orang)","c15")}${cardChart("Bagian yang luka (per orang, bisa lebih dari satu)","c16",280)}${cardChart("Kondisi fatigue (per orang)","c17")}${cardChart("Living status (per orang)","c18")}${cardChart("Status investigasi","c19")}</div>`;
+const g=(f,id,t="bar",o)=>{const e=cnt(d,f);chart(id,t,e.map(x=>x[0]),e.map(x=>x[1]),o)};
+{const ys=[...new Set(d.map(yr))].sort(),pal=["#c2410c","#0e7490","#6d28d9","#ca8a04","#16a34a"];
+chart("c0","bar",ys,ys.map(y=>d.filter(i=>yr(i)==y).length));
+CH.push(new Chart(document.getElementById("c1"),{type:"line",data:{labels:MON.map(m=>m.slice(0,3)),datasets:ys.map((y,k)=>({label:y,data:MON.map((m,x)=>d.filter(i=>yr(i)==y&&+i.date.slice(5,7)-1==x).length),borderColor:pal[k%5],backgroundColor:pal[k%5],tension:.3}))},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}))}
+g(i=>i.co,"c2","bar",{h:1});g(i=>i.cls,"c3","doughnut");g(i=>i.jns,"c4","bar",{h:1});
+chart("c5","bar",HRS.map(h=>h.slice(0,5)),HRS.map(h=>d.filter(i=>i.time==h).length));
+g(i=>i.shift?(i.shift==1?"Day":"Night"):"","c6","doughnut");g(i=>i.dept,"c7","bar",{h:1});g(i=>i.loc,"c8","bar",{h:1});g(i=>i.unit,"c9","bar",{h:1});extra(d)}
+function list(){const d=F().filter(i=>(!V.q||(i.title+nm(i)+i.ir).toLowerCase().includes(V.q.toLowerCase()))&&(!V.m||i.mon==V.m));
+$("#app").innerHTML=`<div class="card"><div class="row"><input placeholder="Cari judul / nama (semua orang) / no. laporan" value="${esc(V.q)}" oninput="V.q=this.value;list2()" style="max-width:300px"><select onchange="V.m=this.value;render()"><option value="">Semua bulan</option>${MON.map(m=>`<option ${V.m==m?"selected":""}>${m}</option>`).join("")}</select>${selY()}${selC()}${selS()}${selI()}<span class="mu">${d.length} data</span></div>${selX()}<div class="wrap" id="tb"></div></div>`;list2()}
+function list2(){const d=F().filter(i=>(!V.q||(i.title+nm(i)+i.ir).toLowerCase().includes(V.q.toLowerCase()))&&(!V.m||i.mon==V.m));
+$("#tb").innerHTML=`<table><tr><th>No. Laporan</th><th>Tanggal</th><th>Judul</th><th>Perusahaan</th><th>Klasifikasi</th><th>RTP</th><th>Investigasi</th><th>Status</th></tr>${d.map(i=>{const r=rp(i.id),k=r.filter(x=>x.status=="Done").length;return `<tr class="cl" onclick="go('detail','${i.id}')"><td>${esc(i.ir)}</td><td>${i.date}</td><td>${esc(i.title)}${(i.others||[]).length?` <span class="tag" title="Jumlah orang terlibat">👥 ${pp(i).length}</span>`:""}</td><td>${esc(i.co)}</td><td><span class="tag">${esc(i.cls)}</span></td><td>${r.length?k+"/"+r.length:"-"}</td><td><span class="tag ${invCls(i)}">${invOf(i)}</span></td><td><span class="tag ${stOf(i)}">${stOf(i)}</span></td></tr>`}).join("")}</table>`}
+const FLD_=(F,v)=>F.map(f=>fld(f,v[f[0]])).join("");
+const SECS=[["Informasi Kejadian",["ir","date","time","day","shift","co","title"]],["Lokasi & Unit",["dept","loc","unit"]],["Klasifikasi & Dampak",["cls","jns","dlMan","dlUnit","cost"]],["Investigasi",["invStatus"]],["Kronologi Singkat",["chrono"]]];
+const FLD_S=v=>SECS.map(([h,ks])=>`<h4 class="sec">${h}</h4><div class="f">${ks.map(k=>{const s=fld(FLD.find(f=>f[0]==k),v[k]);return k=="title"?s.replace("<div>",'<div style="grid-column:1/-1">'):s}).join("")}</div>`).join("");
+function persCard(i){const P=pp(i),m=P.length>1;return `<div class="card"><h3>${m?"Orang yang terlibat ("+P.length+")":"Data karyawan"}</h3>${P.map((p,k)=>`<div${m&&k?` style="border-top:1px dashed var(--bd);margin-top:12px;padding-top:10px"`:""}>${m?`<b>#${k+1} ${esc(p.name)||"-"}</b>`:""}<div class="f" style="margin-top:6px">${[["Nama",p.name],["NIK",p.nik],["Jabatan",p.pos],["Lama kerja",p.hired],["Umur",p.age],["Umur SIMPER",p.kage],["Tipe SIMPER",p.kt],["Bagian luka",injs(p).join(", ")],["Fatigue",p.fatigue],["Living",String(p.inMess).toUpperCase()=="Y"?"Inside Mess":String(p.outMess).toUpperCase()=="Y"?"Outside Mess":""]].map(([a,b])=>`<div><span class="mu">${a}</span><br>${esc(b)||"-"}</div>`).join("")}</div></div>`).join("")}</div>`}
+function detail(){const i=S.inc.find(x=>x.id==V.id);if(!i)return go("list");
+const kv=[["Project/Subkon",i.co],["Tanggal",i.date],["Jam",i.time],["Hari ke-",i.day],["Shift",i.shift==1?"1 (Day)":i.shift==2?"2 (Night)":""],["Departemen",i.dept],["Lokasi",i.loc],["Unit",i.unit],["Daylost Man",i.dlMan],["Daylost Unit",i.dlUnit],["Estimasi biaya (TAR)","Rp "+idr(+i.cost||0)],["Status investigasi",invOf(i)],["Klasifikasi",i.cls],["Jenis",i.jns]];
+$("#app").innerHTML=`<button class="ghost" onclick="go('list')">← Kembali ke Data Insiden</button><div class="card hero"><div class="row" style="justify-content:space-between;align-items:flex-start;margin:0"><div><span class="mu">${esc(i.ir)}</span><h2 class="ttl">${esc(i.title)}</h2><div class="row" style="margin:8px 0 0"><span class="tag">${esc(i.cls)}</span><span class="tag ${stOf(i)}">${stOf(i)}</span><span class="tag ${invCls(i)}">Investigasi: ${esc(invOf(i))}</span></div></div>${ME.role=="admin"?`<button onclick="go('form');V.ed='${i.id}';render()">Edit data</button>`:""}</div><div class="f dl" style="margin-top:14px">${kv.map(([a,b])=>`<div><span class="mu">${a}</span><br>${esc(b)||"-"}</div>`).join("")}</div></div>
+<div class="card"><h3>Kronologi singkat</h3><p class="chrono">${esc(i.chrono)||'<span class="mu">Belum diisi.</span>'}</p></div>
+${persCard(i)}${invCard(i)}${closeCard(i)}<div class="card"><h3>Root cause</h3>${Object.keys(GRP).map(g=>`<p style="margin:10px 0 4px"><b>${GRP[g]}</b></p><div class="rc">${RC.map((r,x)=>r[1]==g?`<label><input type="checkbox" ${i.rc.includes(x)?"checked":""} onchange="tg('${i.id}',${x},this.checked)">${r[0]}</label>`:"").join("")}</div>`).join("")}</div>
+<div class="card"><h3>Rencana tindak lanjut perbaikan (RTP)</h3>${rp(i.id).map(rtpCard).join("")||'<p class="mu">Belum ada RTP.</p>'}
+<form onsubmit="return addR(event,'${i.id}')" class="f" style="margin-top:10px"><div><label>Tindakan perbaikan</label><input name="action" required></div><div><label>PIC</label><input name="pic"></div><div><label>Target selesai</label><input name="due" type="date"></div><div style="align-self:end"><button class="pri">+ Tambah RTP</button></div></form></div>`}
+function tg(id,x,on){const i=S.inc.find(z=>z.id==id);i.rc=on?[...new Set([...i.rc,x])]:i.rc.filter(y=>y!=x);save()}
+function addR(e,id){e.preventDefault();const o={id:"r"+Date.now(),incId:id,status:"Open",progress:0,ev:[],log:[]};new FormData(e.target).forEach((v,k)=>o[k]=v);S.rtp.push(o);save();render();return false}
+function rtpCard(r){const od=r.status!="Done"&&r.due&&r.due<new Date().toISOString().slice(0,10);
+return `<div class="card" style="background:var(--bg)"><div class="row" style="justify-content:space-between"><b>${esc(r.action)}</b><span class="tag ${r.status}">${r.status=="Progress"?"Dalam proses":r.status=="Done"?"Selesai":"Open"}</span></div>
+<div class="mu">PIC: ${esc(r.pic)||"-"} · Target: ${r.due||"-"} ${od?'<b style="color:var(--er)">· TERLAMBAT</b>':""}</div>
+<div class="bar" style="margin:6px 0"><i style="width:${r.progress}%"></i></div>
+<div class="row ctl"><select onchange="up('${r.id}','status',this.value)">${[["Open","Open"],["Progress","Dalam proses"],["Done","Selesai"]].map(([v,l])=>`<option value="${v}" ${r.status==v?"selected":""}>${l}</option>`).join("")}</select><input type="range" min="0" max="100" step="5" value="${r.progress}" style="width:140px" onchange="up('${r.id}','progress',+this.value)"><span>${r.progress}%</span><label class="btn" style="margin:0;color:var(--tx)">📎 Unggah bukti<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" hidden onchange="upl('${r.id}',this.files)"></label>${ME.role=="admin"?`<button onclick="del('${r.id}')">Hapus</button>`:""}</div>
+<div class="ev">${r.ev.map(e=>e.t.startsWith("image")?`<span class="imgw"><img src="${TH(e.id,400)}" title="${esc(e.n)}" onclick="lb('${TH(e.id,1600)}')"><a class="chip" href="https://drive.google.com/uc?export=download&id=${e.id}" title="Unduh">⬇ Unduh</a></span>`:`<a class="chip" target="_blank" rel="noopener" href="https://drive.google.com/file/d/${e.id}/view">📄 ${esc(e.n)}</a><a class="chip" href="https://drive.google.com/uc?export=download&id=${e.id}" title="Unduh">⬇</a>`).join("")}</div>
+${r.log.map(l=>`<div class="mu">• ${l}</div>`).join("")}<div class="row ctl" style="margin:6px 0 0"><input placeholder="Catatan progres…" style="flex:1" onkeydown="if(event.key=='Enter'){note('${r.id}',this.value)}"></div></div>`}
+function up(id,k,v){const r=S.rtp.find(x=>x.id==id);r[k]=v;if(k=="status"&&v=="Done")r.progress=100;r.log.push(`${new Date().toLocaleDateString("id-ID")}: ${k=="status"?"status → "+v:"progres "+v+"%"}`);save();render()}
+function note(id,t){if(!t.trim())return;const r=S.rtp.find(x=>x.id==id);r.log.push(`${new Date().toLocaleDateString("id-ID")}: ${t}`);save();render()}
+function del(id){if(confirm("Hapus RTP ini?")){S.rtp=S.rtp.filter(x=>x.id!=id);save();render()}}
+function lb(s){$("#lbi").src=s;$("#lb").style.display="flex"}
+function rca(){const d=F(),c=RC.map((r,x)=>d.filter(i=>i.rc.includes(x)).length);
+$("#app").innerHTML=`<div class="row">${selY()}${selC()}${selS()}${selI()}${selP()}</div>${selX()}<div class="grid">${cardChart("Root cause – ringkasan 4 kelompok (% dari total penyebab)","r0")}${Object.keys(GRP).map(g=>cardChart(GRP[g]+" (% dari "+d.length+" insiden)","r"+g,300)).join("")}</div>`;
+chart("r0","bar",Object.values(GRP),Object.keys(GRP).map(g=>RC.reduce((a,r,x)=>a+(r[1]==g?c[x]:0),0)));
+Object.keys(GRP).forEach(g=>{const e=RC.map((r,x)=>[r[0],c[x]]).filter((_,x)=>RC[x][1]==g).sort((a,b)=>b[1]-a[1]);chart("r"+g,"bar",e.map(x=>x[0]),e.map(x=>x[1]),{h:1,total:d.length,unit:"insiden"})})}
+function rtpAll(){const A=S.rtp.filter(r=>(!V.rs||r.status==V.rs)&&(!V.y||yr(S.inc.find(i=>i.id==r.incId)||{})==V.y));
+$("#app").innerHTML=`<div class="row">${selY()}<select onchange="V.rs=this.value;render()"><option value="">Semua status</option><option value="Open">Open</option><option value="Progress">Dalam proses</option><option value="Done">Selesai</option></select><span class="mu">${A.length} RTP</span></div>${A.map(r=>{const i=S.inc.find(x=>x.id==r.incId)||{};return `<div><a href="#" onclick="go('detail','${i.id}');return false" style="color:var(--pr)">${esc(i.ir)} – ${esc(i.title)}</a>${rtpCard(r)}</div>`}).join("")||'<div class="card mu">Belum ada RTP. Buka sebuah insiden dari Daftar Insiden untuk menambahkannya.</div>'}`}
+
+/* ===== KONFIGURASI: isi dua nilai ini ===== */
+const API_URL="https://script.google.com/macros/s/AKfycbzGzLNBM9Vp8AABYMtpvY9TT8MTAJZokrCmA7KUeNCkrAXPbOoqqTp4_oV024HMhE9E/exec";
+/* ===== Koneksi ke Apps Script ===== */
+let S={inc:[],rtp:[]},ME=null,TOKEN=sessionStorage.getItem("tk")||"",SNAP={};
+const TH=(id,w)=>`https://drive.google.com/thumbnail?id=${id}&sz=w${w}`;
+async function api(action,data){let r;try{r=JSON.parse(await(await fetch(API_URL,{method:"POST",body:JSON.stringify({action,token:TOKEN,data})})).text())}catch(e){throw Object.assign(new Error("Tidak bisa terhubung ke server (koneksi putus, atau Apps Script mengembalikan error – cek menu Executions)"),{net:1})}
+if(!r.ok){if(r.error=="AUTH"){TOKEN="";sessionStorage.removeItem("tk");ME=null;setTimeout(()=>{alert("Sesi login berakhir. Silakan masuk kembali.");V.p="login";start()},0)}throw new Error(r.error)}if(r.user)ME=r.user;return r.data}
+const snap=()=>{SNAP={};[...S.inc,...S.rtp].forEach(x=>SNAP[x.id]=JSON.stringify(x))};
+/* ===== Unggah file (kecil langsung, besar bertahap per 2 MB, maks. 100 MB) ===== */
+const CHK=2097152,MAXF=104857600;
+const b64c=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result.split(",")[1]);r.onerror=no;r.readAsDataURL(b)});
+const imgB64=f=>new Promise((ok,no)=>{const rd=new FileReader();rd.onerror=no;rd.onload=()=>{const im=new Image();im.onerror=no;im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",.8).split(",")[1])};im.src=rd.result};rd.readAsDataURL(f)});
+async function upFile(f,ctx){st("Mengunggah "+f.name+"…");
+if(f.type.startsWith("image")){const b=await imgB64(f);return enq(()=>api("upload",{...ctx,name:f.name,type:"image/jpeg",b64:b}))}
+if(f.size>MAXF)throw new Error("ukuran maksimal 100 MB");const t=f.type||"application/pdf";
+if(f.size<=CHK)return enq(async()=>api("upload",{...ctx,name:f.name,type:t,b64:await b64c(f)}));
+const init=await enq(()=>api("uploadInit",{...ctx,name:f.name,type:t,size:f.size}));let res;
+for(let s=0;s<f.size;s+=CHK){const e=Math.min(s+CHK,f.size);
+res=await enq(async()=>api("uploadChunk",{uri:init.uri,start:s,end:e,size:f.size,b64:await b64c(f.slice(s,e))}));
+st(`Mengunggah ${f.name} ${Math.round(e/f.size*100)}%`)}
+if(!res||!res.id)throw new Error("unggah belum selesai, coba lagi");return{id:res.id,n:f.name,t:t}}
+async function upl(id,fs){const r=S.rtp.find(x=>x.id==id);let ok=0;
+for(const f of fs){try{r.ev.push(await upFile(f,{incId:r.incId,rtpId:r.id}));ok++}catch(e){alert(f.name+": "+e.message)}}
+if(ok){r.log.push(`${new Date().toLocaleDateString("id-ID")}: ${ok} bukti ditambahkan`);save()}else st("");render()}
+async function uplInv(id,fs){const i=S.inc.find(x=>x.id==id);i.invReport=i.invReport||[];let ok=0;
+for(const f of fs){try{i.invReport.push(await upFile(f,{incId:id}));ok++}catch(e){alert(f.name+": "+e.message)}}
+if(ok)save();else st("");render()}
+/* ===== Field lengkap sesuai Excel, form input/edit ===== */
+const AGE=["19 - 20","21 - 25","26 - 30","31 - 35","36 - 40","41 - 45","46 - 50","50+"],HIRED=["0 - 1 Thn","1 - 3 Thn","3 - 5 Thn","5 - 10 Thn","10 Thn +"],KAGE=["00-03 Month","03-06 Month","06-09 Month","09-12 Month","1-2 years","2-3 years","3-5 years","5 years-Up"],YN=["Y","N"],DAYS=[...Array(14)].map((_,i)=>String(i+1));
+const FLD=[["co","Project Name / Subkon","combo"],["ir","Accident Report No"],["date","Date of Accident","date"],["time","Accident Time","sel",HRS],["day","Day (hari ke-)","sel",DAYS],["shift","Shift","sel",["1","2"]],["title","Name of Accident (judul)"],["dept","Department","combo"],["loc","Location","combo"],["unit","Unit Type","combo"],["dlMan","Daylost Man","number"],["dlUnit","Daylost Unit","number"],["cost","Estimated Cost TAR (Rp)","number"],["invStatus","Status Investigasi","sel",INV],["cls","Accident Classification","combo"],["jns","Jenis Accident","combo"],["chrono","Kronologi singkat kejadian","area"]];
+const PF=[["name","Name"],["nik","NIK"],["pos","Position","combo"],["hired","Length of Hired","sel",HIRED],["age","Age (umur karyawan)","sel",AGE],["kage","Kimper Age (umur SIMPER)","sel",KAGE],["kt","Kimper Type","sel",["Full","Probation"]],["fatigue","Fatigue Condition (Y/N)","sel",YN],["inMess","Living Status – Inside Mess","sel",YN],["outMess","Living Status – Outside Mess","sel",YN],["inj","Part of Injury","chk"]];
+function oth(s){const i=s.parentElement.querySelector("input");i.style.display=s.value=="__other__"?"":"none";if(s.value=="__other__")i.focus()}
+function fld(f,v,pre=""){const[k,l,t,o]=f,n=pre+k;v=v??"";
+if(t=="chk"){const cur=String(v).split(",").map(x=>x.trim()).filter(Boolean);return `<div style="grid-column:1/-1"><label>${l} (boleh lebih dari satu)</label><div class="chks">${opts(k).map(x=>`<label class="ck"><input type="checkbox" name="${n}" value="${esc(x)}" ${cur.includes(x)?"checked":""} onchange="injChk(this)">${esc(x)}</label>`).join("")}</div><input name="${n}__o" placeholder="Bagian lain (ketik manual, pisahkan dengan koma)" style="margin-top:4px"></div>`}
+if(t=="combo")return `<div><label>${l}</label><select name="${n}" onchange="oth(this)"><option value=""></option>${opts(k).map(x=>`<option ${v==x?"selected":""}>${esc(x)}</option>`).join("")}<option value="__other__">➕ Lainnya (ketik manual)…</option></select><input name="${n}__o" placeholder="Ketik ${esc(l)} baru" style="display:none;margin-top:6px"></div>`;
+if(t=="area")return `<div style="grid-column:1/-1"><label>${l}</label><textarea name="${n}" rows="4" placeholder="Jelaskan urutan kejadian secara singkat (waktu – kejadian – tindakan awal)">${esc(v)}</textarea></div>`;
+return `<div><label>${l}</label>${t=="sel"?`<select name="${n}"><option value=""></option>${o.map(x=>`<option ${v==x?"selected":""}>${esc(x)}</option>`).join("")}${v!==""&&!o.map(String).includes(String(v))?`<option selected>${esc(v)}</option>`:""}</select>`:`<input name="${n}" type="${t||"text"}" value="${esc(v)}">`}</div>`}
+function injChk(c){if(!c.checked)return;c.closest(".chks").querySelectorAll("input").forEach(x=>{if(x!==c&&(c.value=="NIHIL"||x.value=="NIHIL"))x.checked=false})}
+let PN=0;
+function personCard(p,k){const pre=k?"o"+k+"_":"";return `<div class="card pc" style="background:var(--bg)"><div class="row" style="justify-content:space-between"><b>Orang #${k+1}</b>${k?`<button type="button" onclick="this.closest('.pc').remove();renum()">Hapus</button>`:""}</div><div class="f">${PF.map(f=>fld(f,p[f[0]],pre)).join("")}</div></div>`}
+function renum(){document.querySelectorAll("#ppl .pc").forEach((c,x)=>c.querySelector("b").textContent="Orang #"+(x+1)+(x?"":" (utama)"))}
+function addPerson(){$("#ppl").insertAdjacentHTML("beforeend",personCard({},++PN));renum()}
+function form(){const o=V.ed?S.inc.find(x=>x.id==V.ed):null,n=S.inc.length+1,ot=o?(o.others||[]):[];PN=ot.length;
+$("#app").innerHTML=`<div class="card"><form onsubmit="return add(event)">${FLD_S(o||{ir:`IR-${String(n).padStart(3,"0")}/HSE-DP/LHT/`})}<h4 class="sec">Orang yang terlibat</h4><div id="ppl">${[o||{},...ot].map((p,k)=>personCard(p,k)).join("")}</div><button type="button" onclick="addPerson()">+ Tambah orang terlibat</button><p class="mu">${o?"":"Setelah disimpan, lanjutkan ke halaman detail untuk mengisi Root Cause dan RTP."}</p><button class="pri">Simpan</button> <button type="button" onclick="${o?`go('detail','${o.id}')`:"go('list')"}">Batal</button></form></div>`;renum()}
+function add(e){e.preventDefault();const o=V.ed?S.inc.find(x=>x.id==V.ed):{id:"i"+Date.now(),rc:[],invReport:[],others:[]};
+const fv={};new FormData(e.target).forEach((x,k)=>{fv[k]=k in fv?[].concat(fv[k],x):x});
+const G={};Object.keys(fv).forEach(k=>{const m=k.match(/^(o\d+_)?(.*)$/),p=m[1]||"";(G[p]=G[p]||{})[m[2]]=fv[k]});G[""]=G[""]||{};
+const ex=Object.keys(G).filter(k=>k).sort((a,b)=>parseInt(a.slice(1))-parseInt(b.slice(1))),bad=[];
+const fix=(g,F,tag)=>F.forEach(f=>{const k=f[0];
+if(f[2]=="combo"){if(g[k]=="__other__"){const t=String(g[k+"__o"]||"").replace(/\s+/g," ").trim();if(t)g[k]=canon(k,t);else{bad.push(f[1]+tag);g[k]=""}}delete g[k+"__o"]}
+else if(f[2]=="chk"){const v=[].concat(g[k]||[]),mt=String(g[k+"__o"]||"").split(",").map(x=>x.replace(/\s+/g," ").trim()).filter(Boolean).map(x=>canon(k,x));let a=[...new Set([...v,...mt])];if(a.length>1)a=a.filter(x=>x!="NIHIL");g[k]=a.join(", ");delete g[k+"__o"]}});
+fix(G[""],[...FLD,...PF],"");ex.forEach((p,x)=>fix(G[p],PF," (orang #"+(x+2)+")"));
+if(!G[""].date){alert("Tanggal kejadian wajib diisi.");return false}
+if(bad.length){alert("Isi secara manual, atau pilih dari daftar: "+bad.join(", "));return false}
+Object.assign(o,G[""]);o.others=ex.map(p=>PK.reduce((a,k)=>(a[k]=String(G[p][k]??"").trim(),a),{})).filter(p=>PK.some(k=>p[k]));
+o.mon=MON[+o.date.slice(5,7)-1]||"";["shift","day"].forEach(k=>o[k]=+o[k]||"");["cost","dlMan","dlUnit"].forEach(k=>o[k]=+o[k]||0);if(!V.ed)S.inc.push(o);V.ed=null;save();go("detail",o.id);return false}
+function extra(d){const N=s=>String(s??"").trim().replace(/\s+/g," ");
+const og=(f,id,ord,t="bar",o)=>{const m={};d.forEach(i=>{const k=N(f(i));if(k)m[k]=(m[k]||0)+1});const ks=[...ord.filter(k=>m[k]),...Object.keys(m).filter(k=>!ord.includes(k)).sort((a,b)=>m[b]-m[a])];chart(id,t,ks,ks.map(k=>m[k]),o)};
+const P=d.flatMap(pp),ogp=(f,id,ord,t="bar",o={})=>{const m={};P.forEach(p=>{[].concat(f(p)).forEach(x=>{const k=N(x);if(k)m[k]=(m[k]||0)+1})});const ks=[...ord.filter(k=>m[k]),...Object.keys(m).filter(k=>!ord.includes(k)).sort((a,b)=>m[b]-m[a])];chart(id,t,ks,ks.map(k=>m[k]),Object.assign({unit:"orang"},o))};
+og(i=>i.day,"c10",DAYS);ogp(i=>i.pos,"c11",[],"bar",{h:1});ogp(i=>i.hired,"c12",HIRED);ogp(i=>i.age,"c13",AGE);ogp(i=>i.kage,"c14",KAGE);
+ogp(i=>{const k=N(i.kt);return k?k[0].toUpperCase()+k.slice(1).toLowerCase():""},"c15",[],"doughnut");ogp(i=>injs(i),"c16",[],"bar",{h:1,total:P.length});
+ogp(i=>({Y:"Fatigue (Ya)",N:"Tidak fatigue"})[String(i.fatigue).toUpperCase()],"c17",[],"doughnut");
+ogp(i=>String(i.inMess).toUpperCase()=="Y"?"Inside Mess":String(i.outMess).toUpperCase()=="Y"?"Outside Mess":"","c18",[],"doughnut");og(i=>invOf(i),"c19",INV,"doughnut")}
+/* ===== Penyimpanan: antrean berurutan + coba ulang otomatis ===== */
+let Q=Promise.resolve(),T;const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const enq=fn=>{const p=Q.then(async()=>{for(let k=0;;k++){try{return await fn()}catch(e){if(!e.net||k>=2)throw e;await sleep(1500*(k+1))}}});Q=p.catch(()=>{});return p};
+function st(m,bad){const e=$("#st");e.textContent=m;e.className=bad?"bad":"";e.style.display=m?"block":"none"}
+function save(){clearTimeout(T);st("Menyimpan…");T=setTimeout(flush,700)}
+function flush(){const jobs=[];
+S.inc.forEach(i=>{const j=JSON.stringify(i);if(SNAP[i.id]!=j)jobs.push(["saveInc",i,i.id,j])});
+S.rtp.forEach(r=>{const j=JSON.stringify(r);if(SNAP[r.id]!=j)jobs.push(["saveRtp",r,r.id,j])});
+const ids=new Set([...S.inc,...S.rtp].map(x=>x.id));Object.keys(SNAP).filter(k=>!ids.has(k)&&k[0]=="r").forEach(k=>jobs.push(["delRtp",{id:k},k,null]));
+if(!jobs.length)return st("");st("Menyimpan…");
+jobs.reduce((p,[a,d,id,j])=>p.then(()=>enq(()=>api(a,d)).then(()=>{j===null?delete SNAP[id]:SNAP[id]=j})),Promise.resolve())
+.then(()=>{st("Tersimpan ✓");setTimeout(()=>{if($("#st").textContent=="Tersimpan ✓")st("")},1500)}).catch(e=>st("Gagal menyimpan: "+e.message+" — klik di sini untuk coba lagi",1))}
+/* ===== Filter tahun/status & closing insiden ===== */
+const yr=i=>String(i.date||"").slice(0,4),stOf=i=>i.status||"Open",today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const years=()=>[...new Set(S.inc.map(yr).filter(Boolean))].sort().reverse();
+const F=()=>S.inc.filter(i=>(!V.y||yr(i)==V.y)&&(!V.co||i.co==V.co)&&(!V.st||stOf(i)==V.st)&&(!V.iv||invOf(i)==V.iv)&&(!V.dp||i.dept==V.dp)&&(!V.jb||pp(i).some(p=>p.pos==V.jb))&&(!V.lc||i.loc==V.lc)&&(!V.un||i.unit==V.un)&&(!V.cl||i.cls==V.cl)&&(!V.jn||i.jns==V.jn));
+const sel=(k,all,o)=>`<select onchange="V.${k}=this.value;render()"><option value="">${all}</option>${o.map(([v,l])=>`<option value="${esc(v)}" ${V[k]==v?"selected":""}>${esc(l)}</option>`).join("")}</select>`;
+const selY=()=>sel("y","Semua tahun",years().map(y=>[y,y])),selC=()=>sel("co","Semua perusahaan",opts("co").map(c=>[c,c])),selS=()=>sel("st","Semua status",[["Open","Open"],["Closed","Closed"]]),selI=()=>sel("iv","Semua investigasi",INV.map(x=>[x,x])),selX=()=>`<details ${V.xo?"open":""} ontoggle="V.xo=this.open" style="margin:-4px 0 12px"><summary class="mu" style="cursor:pointer">Filter lanjutan (departemen, jabatan, lokasi, unit, klasifikasi, jenis)</summary><div class="row" style="margin-top:8px">${[["dp","Semua departemen","dept"],["jb","Semua jabatan","pos"],["lc","Semua lokasi","loc"],["un","Semua unit","unit"],["cl","Semua klasifikasi","cls"],["jn","Semua jenis","jns"]].map(([k,a,f])=>sel(k,a,opts(f).map(x=>[x,x]))).join("")}</div></details>`,
+selP=()=>`<select onchange="V.pm=this.value;render()" title="Label pada grafik">${[["both","Label: jumlah & %"],["n","Label: jumlah"],["p","Label: persentase"]].map(([v,l])=>`<option value="${v}" ${V.pm==v?"selected":""}>${l}</option>`).join("")}</select>`;
+function closeCard(i){const R=rp(i.id),miss=[];if(!R.length)miss.push("Belum ada RTP");R.forEach(r=>{if(r.status!="Done")miss.push(`RTP "${r.action}" belum selesai`);else if(!r.ev.length)miss.push(`RTP "${r.action}" belum ada bukti`)});
+if(stOf(i)=="Closed")return `<div class="card"><h3>Status insiden</h3><span class="tag Closed">CLOSED</span> ${esc(i.closeDate)} · oleh ${esc(i.closeBy)}<p>${esc(i.closeNote)||"-"}</p>${ME.role=="admin"?`<button onclick="reopen('${i.id}')">Buka kembali (reopen)</button>`:""}</div>`;
+return `<div class="card"><h3>Status insiden</h3><span class="tag Open">OPEN</span>${miss.length?`<ul class="mu">${miss.map(m=>`<li>${esc(m)}</li>`).join("")}</ul><p class="mu">Closing aktif setelah semua RTP selesai dan memiliki bukti.</p>`:`<form onsubmit="return closeInc(event,'${i.id}')" class="f" style="margin-top:8px"><div><label>Tanggal closing</label><input type="date" name="d" value="${today()}" required></div><div><label>Ditutup oleh</label><input name="by" required></div><div style="grid-column:1/-1"><label>Catatan penutupan</label><textarea name="n" rows="2"></textarea></div><div><button class="pri">Closing insiden</button></div></form>`}</div>`}
+function closeInc(e,id){e.preventDefault();const i=S.inc.find(x=>x.id==id),f=new FormData(e.target);Object.assign(i,{status:"Closed",closeDate:f.get("d"),closeBy:f.get("by"),closeNote:f.get("n")});save();render();return false}
+function reopen(id){if(!confirm("Buka kembali insiden ini?"))return;Object.assign(S.inc.find(x=>x.id==id),{status:"Open",closeDate:"",closeBy:"",closeNote:""});save();render()}
+/* ===== Investigasi kecelakaan & laporan penyelidikan ===== */
+function invCard(i){const R=i.invReport||[],a=ME&&ME.role=="admin";
+return `<div class="card"><h3>Investigasi kecelakaan</h3><div class="row"><span class="tag ${invCls(i)}">${esc(invOf(i))}</span>${a?`<select onchange="setInv('${i.id}',this.value)">${INV.map(x=>`<option ${invOf(i)==x?"selected":""}>${x}</option>`).join("")}</select><label class="btn" style="margin:0;color:var(--tx)">📎 Unggah laporan penyelidikan<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" hidden onchange="uplInv('${i.id}',this.files)"></label>`:""}</div>${R.length?`<div class="ev">${R.map((e,k)=>`<span><a class="chip" target="_blank" rel="noopener" href="https://drive.google.com/file/d/${e.id}/view">📄 ${esc(e.n)}</a><a class="chip" href="https://drive.google.com/uc?export=download&id=${e.id}" title="Unduh">⬇</a>${a?` <button onclick="delInv('${i.id}',${k})" title="Hapus dari daftar">✕</button>`:""}</span>`).join("")}</div>`:'<p class="mu">Belum ada laporan penyelidikan kecelakaan.</p>'}</div>`}
+function setInv(id,v){S.inc.find(x=>x.id==id).invStatus=v;save();render()}
+function delInv(id,k){if(!confirm("Hapus laporan ini dari daftar? (file tetap tersimpan di Google Drive)"))return;S.inc.find(x=>x.id==id).invReport.splice(k,1);save();render()}
+/* ===== Login, navigasi, render ===== */
+async function start(){$("#app").innerHTML='<p class="mu">Memuat data…</p>';try{S=await api("getAll");S.inc.forEach(i=>{if(!i.mon&&i.date)i.mon=MON[+i.date.slice(5,7)-1]||"";if(i.dept=="HR & GA")i.dept="HRGA";if(!Array.isArray(i.others))i.others=[]});snap();if(!V.y)V.y=years()[0]||"";render()}catch(e){if(e.message!="AUTH")$("#app").innerHTML='<div class="card">'+esc(e.message=="FORBIDDEN"?"Email Anda belum terdaftar di portal. Hubungi admin HSE.":e.message)+'</div>'}}
+
+/* ===== Login manual (username & password), navigasi, tampilan ===== */
+const ICO={dash:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',form:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',rca:'<circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/>',rtp:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>'};
+function nav(){const a=ME&&ME.role=="admin",t=[["dash","Dashboard"],["list","Data Insiden"],...(a?[["form","Input Resume"]]:[]),["rca","Root Cause"],["rtp","RTP & Bukti"]];
+$("#nav").innerHTML=t.map(([k,l])=>`<button class="${V.p==k||(k=="list"&&V.p=="detail")?"on":""}" onclick="go('${k}')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICO[k]}</svg><span>${l}</span></button>`).join("");
+$("#usr").innerHTML=ME&&ME.role!="public"?`<div class="who"><b>${esc(ME.nama)}</b><span class="tag">${esc(ME.role)}</span></div><button onclick="logout()">Keluar</button>`:`<div class="who"><b>Mode Publik</b><span class="mu">Hanya lihat & unduh</span></div><button class="pri" onclick="go('login')">Masuk petugas</button>`}
+const PT={dash:["Dashboard","Ringkasan insiden, tren, dan penyebab"],list:["Data Insiden","Cari dan buka rincian setiap insiden"],detail:["Detail Insiden","Resume, investigasi, root cause, dan tindak lanjut"],rca:["Analisis Root Cause","Sebaran penyebab dasar insiden"],rtp:["RTP & Bukti Perbaikan","Pantau progres perbaikan beserta buktinya"]};
+function render(){CH.forEach(c=>c.destroy());CH=[];theme();nav();({dash,list,form,detail,rca,rtp:rtpAll,login:loginView})[V.p]();
+const t=V.p=="form"?[V.ed?"Edit Resume Insiden":"Input Resume Insiden","Lengkapi data kejadian, kronologi, dan orang yang terlibat"]:PT[V.p];
+if(t)$("#app").insertAdjacentHTML("afterbegin",`<div class="ph"><h2>${t[0]}</h2><p>${t[1]}</p></div>`);
+document.body.classList.toggle("ro",ME.role!="admin"&&ME.role!="pic");
+if(ME.role!="admin"){document.querySelectorAll(".rc input").forEach(x=>x.disabled=true);document.querySelectorAll("#app form:not(.keep)").forEach(f=>f.style.display="none")}}
+function loginView(){$("#app").innerHTML=`<div class="card login"><div class="lg">🔒</div><h3>Masuk Petugas</h3><p class="mu">Khusus HSE/PIC untuk input, edit, dan unggah. Pengunjung tetap dapat melihat data tanpa masuk.</p><form class="keep" onsubmit="return doLogin(event)"><label>Username</label><input name="u" autocomplete="username" required><label style="margin-top:8px">Password</label><input name="p" type="password" autocomplete="current-password" required><div id="lerr" class="err"></div><button class="pri" style="width:100%;margin-top:8px">Masuk</button></form></div>`}
+async function doLogin(e){e.preventDefault();const f=new FormData(e.target),b=e.target.querySelector("button");b.disabled=true;
+try{const r=await api("login",{username:f.get("u"),password:f.get("p")});TOKEN=r.token;sessionStorage.setItem("tk",TOKEN);V.p="dash";await start()}catch(x){$("#lerr").textContent=x.message;b.disabled=false}return false}
+function logout(){TOKEN="";sessionStorage.removeItem("tk");V.p="dash";start()}
+window.onload=()=>start();
+</script></body></html>
