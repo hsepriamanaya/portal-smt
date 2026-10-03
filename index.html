@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Portal Insiden & RTP - PT Dizamatra Powerindo</title>
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Portal Insiden & RTP - PT Dizamatra Powerindo · v3</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--tx:#1b2430;--mu:#667085;--bd:#e3e6eb;--pr:#c2410c;--ok:#16a34a;--wa:#d97706;--er:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -72,9 +72,10 @@ h4.sec{margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--bd);f
 @media(max-width:860px){#shell{display:block}#side{width:auto;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:8px 10px;gap:6px}
 .brand{border:0;margin:0;padding:0}.brand small{display:none}#nav{flex-direction:row;overflow-x:auto;order:3;width:100%}#nav button{width:auto;padding:8px 10px;white-space:nowrap}
 #usr{margin:0 0 0 auto;border:0;padding:0;flex-direction:row;align-items:center}#usr .who{display:none}main{padding:14px}}
+.ver{font-size:10px;color:#64748b;text-align:center;padding-top:6px}
 </style>
 </head><body>
-<div id="shell"><aside id="side"><div class="brand"><div class="logo">DP</div><div><b>Portal Rekapitulasi Insiden & Monitoring RTP</b><small>PT. Dizamatra Powerindo – Lahat</small></div></div><nav id="nav"></nav><div id="usr"></div></aside><main id="app"></main></div><div id="st" onclick="flush()"></div><div id="lb" onclick="this.style.display='none'"><img id="lbi"></div>
+<div id="shell"><aside id="side"><div class="brand"><div class="logo">DP</div><div><b>Portal Rekapitulasi Insiden & Monitoring RTP</b><small>PT. Dizamatra Powerindo – Lahat</small></div></div><nav id="nav"></nav><div id="usr"></div><div class="ver">Versi 3 · login manual</div></aside><main id="app"></main></div><div id="st" onclick="flush()"></div><div id="lb" onclick="this.style.display='none'"><img id="lbi"></div>
 <script>
 const RC=[["Pelaksanaan Prosedur/Kebijakan","UA"],["Penggunaan Peralatan","UA"],["Metode Perlindungan (APD)","UA"],["Tidak Memperhatikan/Menyadari","UA"],["Sistem Pengaman Tidak Memadai","UC"],["Perkakas/Peralatan Tidak Aman","UC"],["Pemaparan Kondisi Kesehatan","UC"],["Lingkungan Kerja Tidak Aman","UC"],["Ketidakmampuan Fisik","HF"],["Stress Fisik","HF"],["Ketidakmampuan Mental","HF"],["Stress Mental","HF"],["Tingkat Keterampilan","HF"],["Perilaku/Kurang Motivasi","HF"],["Kurang Pelatihan","JF"],["Supervisi Tidak Memadai","JF"],["Seleksi & Pengawasan Kontraktor","JF"],["Rekayasa Desain","JF"],["Rencana Pemeliharaan","JF"],["Pembelian & Kendali Bahan","JF"],["Perkakas/Peralatan Tidak Memadai","JF"],["Peraturan/Prosedur Kerja","JF"],["Komunikasi Tidak Memadai","JF"]];
 const GRP={UA:"Tindakan Tidak Aman",UC:"Kondisi Tidak Aman",HF:"Faktor Manusia",JF:"Faktor Pekerjaan"};
