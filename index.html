@@ -21,7 +21,7 @@ h6{font-weight:700;color:#1e3a8a}thead th{background:#1e3a8a!important;color:#ff
 <!-- DASHBOARD -->
 <div id="g1">
 <div class="row g-3 mb-3" id="kpi"></div>
-<div class="d-flex justify-content-between align-items-center mb-2 flex-wrap"><small class="text-muted">💡 Arahkan kursor untuk detail, klik irisan/batang untuk membuka daftar dokumennya, klik legenda untuk menyembunyikan data.</small><div class="form-check"><input type="checkbox" class="form-check-input" id="chAll" onchange="drawCharts()"><label class="form-check-label small" for="chAll">Sertakan dokumen obsolete</label></div></div>
+<div class="d-flex justify-content-between align-items-center mb-2 flex-wrap"><small class="text-muted">💡 Arahkan kursor untuk detail, klik irisan/batang untuk membuka daftar dokumennya, klik legenda untuk menyembunyikan data. Angka tampil langsung di setiap grafik.</small><div class="form-check"><input type="checkbox" class="form-check-input" id="chAll" onchange="drawCharts()"><label class="form-check-label small" for="chAll">Sertakan dokumen obsolete</label></div></div>
 <div class="row g-3 mb-3" id="bars"></div>
 <div class="row g-3">
 <div class="col-lg-6"><div class="card p-3 h-100"><h6>⏰ Perlu Review Berkala</h6><div class="small text-muted mb-2" id="rvInfo"></div><div class="tw" style="max-height:300px"><table class="table table-sm"><tbody id="rv"></tbody></table></div></div></div>
@@ -65,6 +65,25 @@ function dash(rw){
  $('rv').innerHTML=due.length?due.slice(0,30).map(function(d){return '<tr><td><b>'+esc(d.noDokumen)+'</b><br><small>'+esc(d.judul)+'</small></td><td class="text-end"><span class="badge bg-'+(d.sisa<0?'danger':'warning text-dark')+'">'+(d.sisa<0?'Lewat '+(-d.sisa)+' hr':d.sisa+' hari lagi')+'</span></td></tr>'}).join(''):'<tr><td class="text-success">✅ Semua dokumen masih dalam masa review.</td></tr>';
  $('act').innerHTML=(rw||[]).map(function(r){return '<tr><td><small class="text-muted">'+esc(r.waktu)+'</small></td><td><b>'+esc(r.noDokumen)+'</b> rev '+esc(r.revisi)+'<br><small>'+esc(r.ket||'')+'</small></td></tr>'}).join('')||'<tr><td>Belum ada aktivitas.</td></tr>'}
 
+// Plugin label angka permanen (tanpa library tambahan)
+var VL={id:'vl',afterDatasetsDraw:function(ch){
+ var ctx=ch.ctx,type=ch.config.type,horiz=ch.options.indexAxis==='y',tot={},nz={};
+ function ink(c){var h=String(c).replace('#',''),r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return (r*299+g*587+b*114)/1000>150?'#1e293b':'#fff'}
+ if(type==='bar'&&!horiz)ch.data.datasets.forEach(function(ds,di){if(ch.isDatasetVisible(di))ds.data.forEach(function(v,i){if(v)nz[i]=(nz[i]||0)+1})});
+ ctx.save();ctx.font='600 12px Inter, sans-serif';ctx.textBaseline='middle';
+ ch.data.datasets.forEach(function(ds,di){if(!ch.isDatasetVisible(di))return;
+  ch.getDatasetMeta(di).data.forEach(function(el,i){var v=ds.data[i];if(!v)return;
+   var bg=Array.isArray(ds.backgroundColor)?ds.backgroundColor[i%ds.backgroundColor.length]:ds.backgroundColor;
+   if(type==='doughnut'){if(!ch.getDataVisibility(i))return;
+    var p=el.getProps(['x','y','startAngle','endAngle','innerRadius','outerRadius'],true),a=(p.startAngle+p.endAngle)/2,big=(p.endAngle-p.startAngle)>0.4,r=big?(p.innerRadius+p.outerRadius)/2:p.outerRadius+11;
+    ctx.textAlign='center';ctx.fillStyle=big?ink(bg):'#1e293b';ctx.fillText(v,p.x+Math.cos(a)*r,p.y+Math.sin(a)*r);
+   }else if(horiz){ctx.textAlign='left';ctx.fillStyle='#1e293b';ctx.fillText(v,el.x+6,el.y)}
+   else{var h=el.base-el.y,t=tot[i]=tot[i]||{s:0,y:el.y,x:el.x};t.s+=v;t.y=Math.min(t.y,el.y);
+    if(h>=15&&nz[i]>1){ctx.textAlign='center';ctx.fillStyle=ink(bg);ctx.fillText(v,el.x,el.y+h/2)}}
+  })});
+ Object.keys(tot).forEach(function(i){var t=tot[i];ctx.textAlign='center';ctx.fillStyle='#1e293b';ctx.font='700 12px Inter, sans-serif';ctx.fillText(t.s,t.x,t.y-9)});
+ ctx.restore()}};
+
 var PAL=['#1e3a8a','#0ea5e9','#16a34a','#f59e0b','#dc2626','#7c3aed','#0891b2','#db2777','#65a30d','#ea580c','#475569','#0d9488'],CH=[];
 function drill(key,val){var m={perusahaan:'fE',kategori:'fK',departemen:'fD',standarIso:'fS'};
  ['fE','fK','fD','fS'].forEach(function(i){$(i).value=''});$('q').value='';$('ob').checked=$('chAll').checked;$(m[key]).value=val;pg(2);rend();window.scrollTo(0,0)}
@@ -80,16 +99,16 @@ function drawCharts(){
    var mo=[],n=new Date();for(var k=11;k>=0;k--){var x=new Date(n.getFullYear(),n.getMonth()-k,1);mo.push(x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2))}
    var ents=cnt(DOCS,'perusahaan').map(function(x){return x[0]});
    cfg={type:'bar',data:{labels:mo,datasets:ents.map(function(e,j){return {label:e,backgroundColor:PAL[j],data:mo.map(function(m){return D.filter(function(x){return x.perusahaan===e&&String(x.tglTerbit).slice(0,7)===m}).length})}})},
-    options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{position:'bottom'}},interaction:{mode:'index'}}};
+    options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,grace:'15%',ticks:{precision:0}}},plugins:{legend:{position:'bottom'}},interaction:{mode:'index'}}};
   }else{
    var c=cnt(D,d[1]),L=c.map(function(x){return x[0]}),V=c.map(function(x){return x[1]}),dn=d[2]==='doughnut';
    cfg={type:d[2],data:{labels:L,datasets:[{data:V,backgroundColor:PAL,borderWidth:dn?2:0,borderRadius:dn?0:4}]},
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:dn?'x':'y',onHover:hov,
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:dn?'x':'y',layout:{padding:dn?16:0},onHover:hov,
      onClick:function(e,el){if(el.length)drill(d[1],L[el[0].index])},
      plugins:{tooltip:tip,legend:dn?{position:'bottom',labels:{boxWidth:12,font:{size:11}}}:{display:false}},
-     scales:dn?{}:{x:{beginAtZero:true,ticks:{precision:0}}}}};
+     scales:dn?{}:{x:{beginAtZero:true,grace:'12%',ticks:{precision:0}}}}};
   }
-  CH.push(new Chart(cv,cfg))});
+  cfg.plugins=[VL];CH.push(new Chart(cv,cfg))});
 }
 
 function rend(){var q=$('q').value.toLowerCase(),e=$('fE').value,k=$('fK').value,d=$('fD').value,s=$('fS').value,ob=$('ob').checked;
